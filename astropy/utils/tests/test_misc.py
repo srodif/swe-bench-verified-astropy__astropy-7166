@@ -89,6 +89,38 @@ def test_inherit_docstrings():
         assert Subclass.__call__.__doc__ == "FOO"
 
 
+def test_inherit_docstrings_for_properties():
+    """Test that InheritDocstrings works for properties, not just methods."""
+    class Base(metaclass=misc.InheritDocstrings):
+        @property
+        def prop(self):
+            "Base property docstring"
+            return 42
+        
+        @property 
+        def prop_with_existing_doc(self):
+            "Base existing doc"
+            return 0
+
+    class Subclass(Base):
+        @property
+        def prop(self):
+            # This should inherit the docstring from Base.prop
+            return 24
+            
+        @property
+        def prop_with_existing_doc(self):
+            "Subclass overrides doc"  # This should keep its own docstring
+            return 1
+
+    # Test that property docstring inheritance works
+    if Base.prop.__doc__ is not None:
+        assert Subclass.prop.__doc__ == "Base property docstring"
+    
+    # Test that existing docstrings are not overridden  
+    assert Subclass.prop_with_existing_doc.__doc__ == "Subclass overrides doc"
+
+
 def test_set_locale():
     # First, test if the required locales are available
     current = locale.setlocale(locale.LC_ALL)
