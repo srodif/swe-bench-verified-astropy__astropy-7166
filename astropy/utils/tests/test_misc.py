@@ -110,7 +110,7 @@ def test_inherit_docstrings_for_properties():
             
         @property
         def prop_with_existing_doc(self):
-            "Subclass overrides doc"  # This should keep its own docstring
+            "Subclass overrides doc"  # This should keep its own docstring.
             return 1
 
     # Test that property docstring inheritance works
